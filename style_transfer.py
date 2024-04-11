@@ -26,8 +26,9 @@ print(imsize)
 loader = transforms.Compose([transforms.Resize(imsize),  transforms.ToTensor()])  
 
 # Helper function
-def image_loader(image_name):
-    image = Image.open(image_name)
+def image_loader(image_name,new_width, new_height):
+    init_image = Image.open(image_name)
+    image = init_image.resize((new_width, new_height))
     # fake batch dimension required to fit network's input dimensions
     image = loader(image).unsqueeze(0)
     return image.to(device, torch.float)
@@ -35,8 +36,8 @@ def image_loader(image_name):
 
 # Loading of images
 image_directory = "./images/"
-style_img = image_loader(image_directory + "picasso.jpg")
-content_img = image_loader(image_directory + "dancing.jpg")
+style_img = image_loader(image_directory + "picasso.jpg", 600,500)
+content_img = image_loader(image_directory + "dancing.jpg", 600, 500)
 
 assert style_img.size() == content_img.size(), "we need to import style and content images of the same size"
 
@@ -265,7 +266,7 @@ def run_style_transfer(cnn, normalization_mean, normalization_std,
 
     return input_img
 
-output = run_style_transfer(cnn, cnn_normalization_mean, cnn_normalization_std,content_img, style_img, input_img, num_steps=5000)
+output = run_style_transfer(cnn, cnn_normalization_mean, cnn_normalization_std,content_img, style_img, input_img, num_steps=300)
 
 plt.figure()
 imshow(output, title='Output Image')
