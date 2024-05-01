@@ -105,7 +105,7 @@ class StyleLoss(nn.Module):
         self.loss = F.mse_loss(G, self.target)
         return input
 
-# Importing the VGG 19 model like in the paper (here we set it to evaluation mode)
+# Importing the VGG 19 model (here we set it to evaluation mode)
 cnn = models.vgg19(pretrained=True).features.to(device).eval()
 
 # VGG network are normalized with special values for the mean and std
@@ -201,7 +201,7 @@ input_img = content_img.clone()
 plt.figure()
 imshow(input_img, title='Input Image')
 
-# This type of optimizer was prefered by the author of the paper
+
 def get_input_optimizer(input_img):
     # this line to show that input is a parameter that requires a gradient
     optimizer = optim.LBFGS([input_img.requires_grad_()])
@@ -271,7 +271,6 @@ output = run_style_transfer(cnn, cnn_normalization_mean, cnn_normalization_std,c
 plt.figure()
 imshow(output, title='Output Image')
 
-# sphinx_gallery_thumbnail_number = 4
 plt.ioff()
 plt.show()
 
